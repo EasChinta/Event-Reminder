@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Document</title>
+</head>
+
+<body>
+
+
+  <div class="middle">
+    <div class='col-md-8'>
+      <div class="bg-light">
+        <h1 class="display-4">Erinnerungskalender</h1>
+        <hr class="my-4">
+        <p class="lead">Event Reminder</p>
+      </div>
+    </div>
+  </div>
+  <div class='col-md-4'>
+    <?php foreach ($notifications as $row) : ?>
+    <div class="alert alert-primary mb-3 pt-4 pb-4" href="#">
+      <?php echo $row; ?>
+    </div>
+    <?php endforeach; ?>
+  </div>
+
+
+</body>
+
+</html>
