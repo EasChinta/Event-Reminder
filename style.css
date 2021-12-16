@@ -1,10 +1,11 @@
 /* body {
-  background-color: red !important;
+  background-color: red;
 } */
 
 li {
   list-style-type: none;
 }
+
 
 /* NAVBAR LINKS */
 .mylinks {
@@ -86,7 +87,6 @@ a {
   display: flex;
   flex-direction: row;
 }
-
 
 .submit-button {
   float: right;

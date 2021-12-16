@@ -11,35 +11,12 @@ $current_month_day = date("m-d");
 $current_year = date("Y");
 
 
-$sql = "select * from reminders where DATE_FORMAT(DATE, '%m-%d')='{$current_month_day}' and YEAR<>'{$current_year}'";
+$sql = "select * from reminders where DATE_FORMAT(DATE, '%m-%d')='{$current_month_day}' and C_YEAR<>'{$current_year}'";
 $res = $con->query($sql);
 if ($res->num_rows > 0) {
   while ($row = $res->fetch_assoc()) {
     $reminders[] = $row;
   }
-}
-
-#Send birthday wishes to Mail
-foreach ($reminders as $reminder) {
-
-  /*$to = $reminder["EMAIL"];
-
-		$subject = "Birthday Greetings";
-
-		$message = "<h3>Wish you Happy Birthday {$reminder["DESCRIPTION"]}</h3>";
-
-		$header="From:reminder@domain.in"."\r\n";
-		$header.="X-Mailer:PHP/".phpversion()."\r\n";
-		$header.="Content-type:text/html; charset=iso-8859-1";  
-
-		$response=mail($to,$subject,$message,$header);
-		
-		if($response==true){
-			$sql="update reminders set YEAR='{$current_year}'  where ID='{$reminder["ID"]}'";
-			$con->query($sql);
-		}else{
-			echo "Mail send Failed!!!";
-		}*/
 }
 
 ?>
@@ -48,7 +25,7 @@ foreach ($reminders as $reminder) {
 <?php include "header.php"; ?>
 
 <body>
-  <?php include "navbar.php"; ?>
+  <?php include "logo.php"; ?>
   
 
   <div class="section">
@@ -75,7 +52,7 @@ foreach ($reminders as $reminder) {
               We measure progress in the 23 million new jobs that were created when Bill Clinton was President - when the average American family saw its income go up $7,500 instead of down $2,000 like it has under George Bush. Indeed, faith should bring us together.
             </p>
             <p>
-              America! Tonight, if you feel the same energy that I do, if you feel the same urgency that I do, if you feel the same passion I do, if you feel the same hopefulness that I do - if we do what we must do, then I have no doubts that all across the country, from Florida to Oregon, from Washington to Maine, the people will rise up in November, and John Kerry will be sworn in as president, and John Edwards will be sworn in as vice president, and this country will reclaim its promise, and out of this long political darkness a brighter day will come. They're telling me that their conversation about what it means to be Catholic continues. Now Ashley might have made a different choice. The attacks of September 11th, 2001 and the continued efforts of these extremists to engage in violence against civilians has led some in my country to view Islam as inevitably hostile not only to America and Western countries, but also to human rights. And I will host a Summit on Entrepreneurship this year to identify how we can deepen ties between business leaders, foundations and social entrepreneurs in the United States and Muslim communities around the world. But if we choose to be bound by the past, we will never move forward.
+              America! Tonight, if you feel the same energy that I do, if you feel the same urgency that I do, if you feel the same passion I do, if you feel the same hopefulness that I do - if we do what we must do, then I have no doubts that all across the country, from Florida to Oregon, from Washington to Maine, the people will rise up in November, and John Kerry will be sworn in as president, and John Edwards will be sworn in as vice president, and this country will reclaim its promise, and out of this long political darkness a brighter day will come. They're telling me that their conversation about what it means to be Catholic continues. Now Ashley might have made a different choice. The attacks of September 11th, 2001 and the continued efforts of these extremists to engage in violence against civilians has led some in my country to view Terrorism as inevitably hostile not only to America and Western countries, but also to human rights. And I will host a Summit on Entrepreneurship this year to identify how we can deepen ties between business leaders, foundations and social entrepreneurs in the United States and Muslim communities around the world. But if we choose to be bound by the past, we will never move forward.
             </p>
             <p>
               Thank you, God Bless you, and God Bless the United States of America. 🇺🇸

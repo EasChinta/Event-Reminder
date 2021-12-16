@@ -11,7 +11,7 @@ $current_month_day = date("m-d");
 $current_year = date("Y");
 
 
-$sql = "SELECT * FROM reminders WHERE DATE_FORMAT(DATE, '%m-%d')='{$current_month_day}' AND YEAR<>'{$current_year}'";
+$sql = "SELECT * FROM reminders WHERE DATE_FORMAT(DATE, '%m-%d')='{$current_month_day}' AND C_YEAR<>'{$current_year}'";
 $res = $con->query($sql);
 if ($res->num_rows > 0) {
   while ($row = $res->fetch_assoc()) {
@@ -25,7 +25,7 @@ if (isset($_POST["reg"])) {
   $erinnerung = mysqli_real_escape_string($con, $_POST["erinnerung"]);
   $date = date("Y-m-d", strtotime($_POST["date"]));
 
-  $sql = "INSERT INTO reminders (DESCRIPTION,ERINNERUNG,DATE,YEAR) VALUES ('{$description}','{$erinnerung}','{$date}','-')";
+  $sql = "INSERT INTO reminders (DESCRIPTION,ERINNERUNG,DATE,C_YEAR) VALUES ('{$description}','{$erinnerung}','{$date}','-')";
   if ($con->query($sql)) {
   } else {
     echo "<div class='alert alert-danger'>Failed Try Again</div>";
@@ -33,40 +33,24 @@ if (isset($_POST["reg"])) {
 }
 
 
-
-#Send event reminder to Mail
-foreach ($reminders as $user) {
-
-  /*$to = $user["EMAIL"];
-
-		$subject = "Birthday Greetings";
-
-		$message = "<h3>Wish you Happy Birthday {$user["DESCRIPTION"]}</h3>";
-
-		$header="From:user@domain.in"."\r\n";
-		$header.="X-Mailer:PHP/".phpversion()."\r\n";
-		$header.="Content-type:text/html; charset=iso-8859-1";  
-
-		$response=mail($to,$subject,$message,$header);
-		
-		if($response==true){
-			$sql="update reminders set YEAR='{$current_year}'  where ID='{$user["ID"]}'";
-			$con->query($sql);
-		}else{
-			echo "Mail send Failed!!!";
-		}*/
+$notifications=[];
+$current_month_day=date("m-d");
+$sql="SELECT * FROM reminders WHERE DATE_FORMAT(DATE, '%m-%d')='{$current_month_day}'";
+$res=$con->query($sql);
+if($res->num_rows>0){
+  while($row=$res->fetch_assoc()){
+    $date=(date("Y")-date("Y",strtotime($row["DOB"])))+1;
+    $notifications[]="<i class='fa fa-bell'></i> Reminder <b>{$row["DESCRIPTION"]} </b> event is today <b>".date("d-m-Y",strtotime($row["DATE"]))."</b> 
+    <a style='position:absolute; right:20px ' href='delete_reminder.php?id={$row["ID"]}' class=''>X</a>";
+  }
 }
-
-
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <?php include "header.php"; ?>
 
 <body>
-  <?php include "navbar.php"; ?>
+  <?php include "logo.php"; ?>
 
   <div class="section">
 
@@ -110,10 +94,10 @@ foreach ($reminders as $user) {
           </form>
       </div>
 
-      <div class='reminder-message mt-3'>
-        <!-- <?php foreach ($notifications as $row) : ?>
-          <div class="" href="#"><?php echo $row; ?></div>
-        <?php endforeach; ?> -->
+      <div class='reminder-message mt-5'>
+        <?php foreach ($notifications as $row) : ?>
+          <div class="alert alert-primary mb-3 pt-4 pb-4" href="#"><?php echo $row; ?></div>
+        <?php endforeach; ?>
 
         <table class='table table-bordered mt-2'>
           <thead>
@@ -126,7 +110,7 @@ foreach ($reminders as $user) {
           </thead>
           <tbody>
             <?php
-            $sql = "select * from reminders order by ID desc";
+            $sql = "SELECT * FROM reminders ORDER BY ID DESC";
             $res = $con->query($sql);
             if ($res->num_rows > 0) {
               $i = 0;
@@ -151,8 +135,13 @@ foreach ($reminders as $user) {
       <div class="borders mt-5"></div>
     </div>
 
+    
+			
+			
+				
 
 
+  
     <!-- RIGHT PART OF THE SCREEN -->
     <div class="right"></div>
   </div>

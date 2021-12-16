@@ -1,23 +1,27 @@
 <?php
-session_start();
-include "config.php";
+  session_start();
+  include "config.php";
+  
+  #Check if form submitted
+  $message="";
+  if($_SERVER["REQUEST_METHOD"]=='POST'){
+    $description=mysqli_real_escape_string($con,$_POST["description"]);
+    $erinnerung=mysqli_real_escape_string($con,$_POST["erinnerung"]);
+    $date=mysqli_real_escape_string($con,$_POST["date"]);
 
-
-if (isset($_POST["update"])) {
-  $id = $_POST["id"];
-  $description = $_POST["description"];
-  $erinnerung = $_POST["erinnerung"];
-  $date = date("Y-m-d", strtotime($_POST["date"]));
-  $sql = "UPDATE reminders SET DESCRIPTION='$description',ERINNERUNG='$erinnerung',DATE='$date' WHERE ID={$id}";
-}
-
-#Select reminder details from the table
-$sql = "SELECT * FROM reminders WHERE ID='{$_GET["id"]}'";
-$res = $con->query($sql);
-if ($res->num_rows > 0) {
-  $row = $res->fetch_assoc();
-}
-
+    $sql="UPDATE reminders SET DESCRIPTION='{$description}',ERINNERUNG='{$erinnerung}',DATE='{$date}' WHERE ID='{$_GET["id"]}'";
+    if($con->query($sql)){
+      flash('msg','Reminder Updated Successfully');
+    }else{
+      flash('msg','Reminder Update Failed','red');
+    }
+  }
+  
+  #Select reminder details from the table
+  $sql="SELECT * FROM reminders WHERE ID='{$_GET["id"]}'";
+  $res=$con->query($sql);
+  if($res->num_rows>0){
+    $row=$res->fetch_assoc();
 
 ?>
 
@@ -27,7 +31,7 @@ if ($res->num_rows > 0) {
 <?php include "header.php"; ?>
 
 <body>
-  <?php include "navbar.php"; ?>
+  <?php include "logo.php"; ?>
 
   <div class='section'>
 
@@ -54,18 +58,16 @@ if ($res->num_rows > 0) {
     <!-- ENTER REMINDER -->
     <div class="middle container">
       <div class="add-reminder mt-5">
-        <form action='home.php' method='post' autocomplete='off'>
-
-          <input type="hidden" name="id" value="<?php echo $id; ?>">
+        <form method='post' action='<?php echo $_SERVER["REQUEST_URI"]; ?>'>
 
           <label>Date</label>
-          <input type="text" class="datepicker" name='date' value="<?php echo $date; ?>" required>
+          <input type="text" class="datepicker" name='date' required value="<?php echo $row["DATE"]; ?>">
 
           <label>Description</label>
-          <input type="text" class="" name='description' value="<?php echo $description; ?>" required>
+          <input type='text' name='description' required value="<?php echo $row["DESCRIPTION"]; ?>">
 
           <label>Erinnerung</label>
-          <select name="erinnerung" id="erinnerung" value="<?php echo $erinnerung; ?>">
+          <select name="erinnerung" id="erinnerung" required value="<?php echo $row["ERINNERUNG"]; ?>">
             <option value="1 Tag">1 Tag</option>
             <option value="2 Tage">2 Tage</option>
             <option value="4 Tage">4 Tage</option>
@@ -73,7 +75,11 @@ if ($res->num_rows > 0) {
             <option value="2 Woche">2 Woche</option>
           </select>
           <br>
-          <input type='submit' name='update' value='Update & Save' class='mt-2 mb-5 submit-button'>
+
+          <a href="home.php" class="mt-2 mb-5 btn btn-secondary submit-button" style="margin-left: 3px;">Go back</a>
+          <input type='submit' name='submit' class='mt-2 mb-5 submit-button btn btn-secondary' value='Update Details'>
+          
+
         </form>
       </div>
       <!-- ENTER REMINDER -->
@@ -129,3 +135,7 @@ if ($res->num_rows > 0) {
 </body>
 
 </html>
+
+<?php 
+  }
+?>
